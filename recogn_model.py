@@ -7,13 +7,13 @@ import numpy as np
 capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # Загрузите видеофайл, камера:
 # свойства захвата камеры, при видиофайле игнорируются.
 capture.set(cv2.CAP_PROP_FPS, 24)
-capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1600)
 capture.set(cv2.CAP_PROP_FRAME_WIDTH, 900)
+capture.set(cv2.CAP_PROP_FRAME_WIDTH, 600)
 
 
 # player = MediaPlayer(video_path)
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-
+face_cascade = cv2.CascadeClassifier('haarcascade_profileface.xml')
+face_fac_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read("Trainer.yml")
 
@@ -23,7 +23,7 @@ while True:
 	flag, frame = capture.read()
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(30, 30))
-
+	faces = face_fac_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(30, 30))
 	for (x, y, w, h) in faces:
 		serial, conf = recognizer.predict(gray[y:y + h, x:x + w])
 		if conf > 50:
